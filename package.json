@@ -1,0 +1,19 @@
+{
+  "name": "tree",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "nodetree": "./bin/program.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "perf":"node --cpu-prof --trace-gc bin/program.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "commander": "^12.1.0"
+  }
+}
