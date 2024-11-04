@@ -1,48 +1,70 @@
 #!/usr/bin/env node
-const { treeGenerator, treeRecursive } = require('../lib/tree');
+const { printTreeRecursive,printTree } = require('../lib/tree');
 const { resolve } = require('node:path');
 const process = require('node:process');
 const { start } = require('node:repl');
 const colors = require('../lib/colors');
+const { Command } = require('commander');
+
+
+const program = new Command('nodetree')
+.argument('[dir]','Directory to print',process.cwd())
+.description('Print the directorry structure of a given directory (default:current working directory)')
+.version('1.0.0');
+
+
+program
+.option('-t, --git-tracking','display directory with current git tracked status',false)
+.option('-d, --node-dep','print the tree structure of the node_modules dir if any',false)
+.option('-i, --indent <number>', 'set indentation space of printed tree',0)
+.option('-o, --output <file>','Print the output into the given file')
+.option('-f, --fast', false)
+.action(async (dir,{ gitTracking,nodeDep,indent,output,fast}) => {
+   
+        if(fast) {
+            const message ='Git tracking not available with --fast options'
+            printTreeRecursive(dir,{
+                indent:' '.repeat(indent),
+                ignoreNodeModules:!nodeDep,
+            });
+
+            if(gitTracking) {
+                console.error(message);
+                process.exit(0);
+            }
+            
+        }
+
+        return printTree(dir,{
+            gitTracking,
+            ignoreNodeModules:!nodeDep,
+            indent:' '.repeat(indent)
+        });
+});
+
+program.parse();
+
 
 /**
  * TODO
  * commands
  * 
  * nodetree -n alias to nodetree node_modules -> print treedir of node_modules
- * nodetree --git -g <sourcedir> show untrackfile and modified files 
+ * nodetree --git -g <sourcedir> show untrackfile
  * nodetree  <sourcedir> -o <file> print output to a file 
  * nodetree --json print output on json format
- * nodetree -e regex find file by regex ?
+ * nodetree -e regex find file by regex and return the path ?
  */
 
 
 
-const time = process.hrtime.bigint();
-const sourceDir = resolve(process.cwd(),(process.argv.slice(2)[0]) || '');
+
+//const sourceDir = resolve(process.cwd(),(process.argv.slice(2)[0]) || '');
 
 //nodetree <sourceDir> --ignore=file1,file2,file3
 
-async function printTree() {
-    console.log('Printing directory structure of',sourceDir);
-    for await (const node of treeGenerator(sourceDir)) {
-        console.log(node)
-    }
-    const memoryUsage = process.memoryUsage();
-    const elapsed = ((process.hrtime.bigint() - time) / BigInt(1e6));
-    console.log(colors.MAGENTA,`Elapsed Time: ${elapsed.toLocaleString()}ms`,colors.RESET); 
-    console.log(`Memory Usage: RSS=${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
-}
-
-function printTreeRecursive() {
-    console.log('Printing directory structure recursivly of',sourceDir);
-    treeRecursive(sourceDir);
-    const memoryUsage = process.memoryUsage();
-    const elapsed = ((process.hrtime.bigint() - time) / BigInt(1e6));
-    console.log(colors.MAGENTA,`Elapsed Time: ${elapsed.toLocaleString()}ms`,colors.RESET); 
-    console.log(`Memory Usage: RSS=${(memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
-}
 
 
-//printTreeRecursive();
-printTree();
+
+//printTreeRecursive(sourceDir);
+//printTree(sourceDir,{gitTracking:true});
