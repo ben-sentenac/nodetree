@@ -34,7 +34,6 @@ program
             }
             
         }
-
         return printTree(dir,{
             gitTracking,
             ignoreNodeModules:!nodeDep,
