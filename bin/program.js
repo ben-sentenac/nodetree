@@ -20,7 +20,6 @@ program
 .option('-o, --output <file>','Print the output into the given file')
 .option('-f, --fast', false)
 .action(async (dir,{ gitTracking,nodeDep,indent,output,fast}) => {
-   
         if(fast) {
             const message ='Git tracking not available with --fast options'
             printTreeRecursive(dir,{
@@ -35,14 +34,14 @@ program
             
         }
         return printTree(dir,{
-            gitTracking,
+            gitTracking:true,
             ignoreNodeModules:!nodeDep,
             indent:' '.repeat(indent)
         });
 });
 
 program.parse();
-
+//
 
 /**
  * TODO
