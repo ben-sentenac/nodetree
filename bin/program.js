@@ -21,17 +21,13 @@ program
 .option('-f, --fast', false)
 .action(async (dir,{ gitTracking,nodeDep,indent,output,fast}) => {
         if(fast) {
-            const message ='Git tracking not available with --fast options'
+            const message ='WARNING: [Git tracking not available with --fast options]';
+            console.log(message);
             printTreeRecursive(dir,{
                 indent:' '.repeat(indent),
                 ignoreNodeModules:!nodeDep,
             });
-
-            if(gitTracking) {
-                console.error(message);
-                process.exit(0);
-            }
-            
+            process.exit(0);
         }
         return printTree(dir,{
             gitTracking:true,
