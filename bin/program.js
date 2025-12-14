@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { printTreeRecursive,printTree } = require('../lib/tree');
+const { printTreeRecursive,printTree, writeToFile } = require('../lib/tree');
 const process = require('node:process');
 const colors = require('../lib/colors');
 const { Command } = require('commander');
@@ -15,22 +15,31 @@ program
 .option('-t, --git-tracking','display directory with current git tracked status',false)
 .option('-d, --node-dep','print the tree structure of the node_modules dir if any',false)
 .option('-i, --indent <number>', 'set indentation space of printed tree',0)
-.option('-o, --output <file>','Print the output into the given file')
+.option('-o, --output <file>','Print the output into the given file',false)
 .option('-f, --fast', false)
 .action(async (dir,{ gitTracking,nodeDep,indent,output,fast}) => {
         if(fast) {
             const message ='WARNING: [Git tracking not available with --fast options]';
             console.log(message);
-            printTreeRecursive(dir,{
+            return printTreeRecursive(dir,{
                 indent:' '.repeat(indent),
                 ignoreNodeModules:!nodeDep,
             });
-            process.exit(0);
+        }
+        if(output) {
+            try {
+                return await writeToFile(dir,output ?? 'nodetree.log')
+            } catch (error) {
+                if('message' in error || typeof error ==='object') {
+                    console.error(error.message );
+                }
+                process.exit(1);
+            }
         }
         return printTree(dir,{
             gitTracking:true,
             ignoreNodeModules:!nodeDep,
-            indent:' '.repeat(indent)
+            indent:' '.repeat(indent),
         });
 });
 
