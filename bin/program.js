@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 const { printTreeRecursive,printTree } = require('../lib/tree');
-const { resolve } = require('node:path');
 const process = require('node:process');
-const { start } = require('node:repl');
 const colors = require('../lib/colors');
 const { Command } = require('commander');
 
