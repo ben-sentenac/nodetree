@@ -1,4 +1,4 @@
-# nodetree 🌳
+# nodetree 
 
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -126,6 +126,6 @@ Appliqué récursivement
 
 - [ ] Mode silencieux
 
-## 📜 Licence
+## Licence
 
 MIT © Ben Sentenac
