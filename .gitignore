@@ -1,3 +1,5 @@
 node_modules
 test/templates
 output.log
+.env
+issues.md

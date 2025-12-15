@@ -1,7 +1,15 @@
 {
-  "name": "tree",
+  "name": "nodetree",
   "version": "0.1.0",
+  "description": "Display directory tree with colored output (Node.js)",
+  "type": "commonjs",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    }
+  },
   "bin": {
     "nodetree": "./bin/program.js"
   },
@@ -9,10 +17,15 @@
     "test": "node --test",
     "perf": "node --cpu-prof --trace-gc bin/program.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "tree",
+    "filesystem",
+    "cli",
+    "node",
+    "directory"
+  ],
+  "author": "Ben Sentenac",
+  "license": "MIT",
   "dependencies": {
     "commander": "^12.1.0"
   }
